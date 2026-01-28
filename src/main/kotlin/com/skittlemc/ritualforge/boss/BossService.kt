@@ -5,6 +5,7 @@ import com.skittlemc.ritualforge.api.events.BossDeathEvent
 import com.skittlemc.ritualforge.api.events.BossSpawnEvent
 import com.skittlemc.ritualforge.content.boss.BossDefinition
 import com.skittlemc.ritualforge.util.Tasks
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import java.util.UUID
@@ -13,10 +14,10 @@ import java.util.concurrent.ConcurrentHashMap
 class BossService(private val plugin: RitualForgePlugin) {
 
     private val instances = ConcurrentHashMap<UUID, BossInstance>()
-    private var tickTaskId: Int = -1
+    private var tickTask: ScheduledTask? = null
 
     init {
-        tickTaskId = Tasks.repeatAsync(plugin, 0L, 1L) { tickAll() }
+        tickTask = Tasks.globalRepeat(plugin, 1L, 1L) { tickAll() }
     }
 
     fun spawn(definition: BossDefinition, location: Location): BossInstance {
@@ -43,9 +44,7 @@ class BossService(private val plugin: RitualForgePlugin) {
     fun activeBosses(): Collection<BossInstance> = instances.values
 
     fun shutdown() {
-        if (tickTaskId != -1) {
-            Bukkit.getScheduler().cancelTask(tickTaskId)
-        }
+        tickTask?.cancel()
         instances.keys.toList().forEach { despawn(it) }
     }
 

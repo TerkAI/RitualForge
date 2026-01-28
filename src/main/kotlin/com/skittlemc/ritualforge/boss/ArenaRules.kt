@@ -7,7 +7,7 @@ class ArenaRules(private val arena: Arena) {
     fun enforce(player: Player) {
         if (!arena.contains(player.location)) {
             val clamped = arena.clamp(player.location)
-            player.teleport(clamped)
+            player.teleportAsync(clamped)
         }
     }
 

@@ -13,13 +13,13 @@ class ActivationFlow(private val plugin: RitualForgePlugin) {
     fun start(player: Player, ritual: RitualDefinition, location: Location) {
         val world = location.world ?: return
 
-        // Channeling phase: particles + sound over duration
+        // Channeling phase: particles + sound over duration (region-bound task)
         var tick = 0
-        Tasks.repeat(plugin, 0L, 1L) { taskId ->
+        Tasks.regionRepeat(plugin, location, 1L, 1L) { task ->
             if (tick >= ritual.channelingTicks) {
-                org.bukkit.Bukkit.getScheduler().cancelTask(taskId)
+                task.cancel()
                 complete(player, ritual, location)
-                return@repeat
+                return@regionRepeat
             }
 
             world.spawnParticle(Particle.ENCHANT, location.clone().add(0.5, 1.5, 0.5), 10)
