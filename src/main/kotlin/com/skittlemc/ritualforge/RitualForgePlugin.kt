@@ -31,6 +31,7 @@ class RitualForgePlugin : JavaPlugin() {
 
         contentManager.loadAll()
         dataStore.load()
+        bossService.start()
 
         // Register listeners
         server.pluginManager.registerEvents(GuiListener(this), this)
@@ -46,8 +47,12 @@ class RitualForgePlugin : JavaPlugin() {
     }
 
     override fun onDisable() {
-        bossService.shutdown()
-        dataStore.save()
+        if (::bossService.isInitialized) {
+            bossService.shutdown()
+        }
+        if (::dataStore.isInitialized) {
+            dataStore.save()
+        }
         logger.info("RitualForge disabled.")
     }
 }

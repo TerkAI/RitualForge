@@ -16,7 +16,7 @@ class BossService(private val plugin: RitualForgePlugin) {
     private val instances = ConcurrentHashMap<UUID, BossInstance>()
     private var tickTask: ScheduledTask? = null
 
-    init {
+    fun start() {
         tickTask = Tasks.globalRepeat(plugin, 1L, 1L) { tickAll() }
     }
 

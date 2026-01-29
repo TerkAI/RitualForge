@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
 }
 
 val targetJavaVersion = 21
@@ -34,5 +34,5 @@ tasks.processResources {
 }
 
 tasks.runServer {
-    minecraftVersion("1.21")
+    minecraftVersion("1.21.4")
 }
