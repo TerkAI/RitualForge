@@ -28,7 +28,7 @@ class Telegraph(
             val angle = 2.0 * Math.PI * i / steps
             val x = location.x + radius * Math.cos(angle)
             val z = location.z + radius * Math.sin(angle)
-            world.spawnParticle(Particle.REDSTONE, x, location.y + 0.1, z, 1, 0.0, 0.0, 0.0, 0.0, dustOptions)
+            world.spawnParticle(Particle.DUST, x, location.y + 0.1, z, 1, 0.0, 0.0, 0.0, 0.0, dustOptions)
         }
     }
 }

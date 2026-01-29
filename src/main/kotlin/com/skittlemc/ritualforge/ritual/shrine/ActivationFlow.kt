@@ -22,7 +22,7 @@ class ActivationFlow(private val plugin: RitualForgePlugin) {
                 return@regionRepeat
             }
 
-            world.spawnParticle(Particle.ENCHANTMENT_TABLE, location.clone().add(0.5, 1.5, 0.5), 10)
+            world.spawnParticle(Particle.ENCHANT, location.clone().add(0.5, 1.5, 0.5), 10)
             if (tick % 20 == 0) {
                 world.playSound(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1.0f, 1.0f + tick * 0.01f)
             }
