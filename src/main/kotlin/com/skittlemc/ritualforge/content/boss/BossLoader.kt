@@ -1,7 +1,10 @@
 package com.skittlemc.ritualforge.content.boss
 
 import com.skittlemc.ritualforge.RitualForgePlugin
+import org.bukkit.Material
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.EntityType
 import java.io.File
 
 class BossLoader(private val plugin: RitualForgePlugin) {
@@ -33,15 +36,43 @@ class BossLoader(private val plugin: RitualForgePlugin) {
             )
         }
 
+        val entityTypeName = cfg.getString("entity_type") ?: "ZOMBIE"
+        val entityType = runCatching { EntityType.valueOf(entityTypeName.uppercase()) }
+            .getOrDefault(EntityType.ZOMBIE)
+
+        val equipment = parseEquipment(cfg.getConfigurationSection("equipment"))
+
         return BossDefinition(
             id = id,
             displayName = cfg.getString("display_name") ?: id,
             description = cfg.getString("description") ?: "A fearsome boss.",
             maxHealth = cfg.getDouble("max_health", 500.0),
-            modelId = cfg.getString("model") ?: id,
+            entityType = entityType,
+            equipment = equipment,
+            glowing = cfg.getBoolean("glowing", false),
+            scale = cfg.getDouble("scale", 1.0),
+            modelId = cfg.getString("model"),
             phases = phases,
             lootTableId = cfg.getString("loot_table"),
             arenaRadius = cfg.getDouble("arena_radius", 30.0)
         )
+    }
+
+    private fun parseEquipment(section: ConfigurationSection?): BossEquipment {
+        if (section == null) return BossEquipment()
+
+        return BossEquipment(
+            mainHand = parseMaterial(section.getString("main_hand")),
+            offHand = parseMaterial(section.getString("off_hand")),
+            helmet = parseMaterial(section.getString("helmet")),
+            chestplate = parseMaterial(section.getString("chestplate")),
+            leggings = parseMaterial(section.getString("leggings")),
+            boots = parseMaterial(section.getString("boots"))
+        )
+    }
+
+    private fun parseMaterial(name: String?): Material? {
+        if (name == null) return null
+        return Material.matchMaterial(name)
     }
 }

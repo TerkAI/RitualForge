@@ -10,6 +10,7 @@ object Keys {
     }
 
     val CATALYST_ID = NamespacedKey("ritualforge", "catalyst_id")
+    val BOSS_ID = NamespacedKey("ritualforge", "boss_id")
     val BOSS_INSTANCE = NamespacedKey("ritualforge", "boss_instance")
     val SHRINE_ID = NamespacedKey("ritualforge", "shrine_id")
 }
