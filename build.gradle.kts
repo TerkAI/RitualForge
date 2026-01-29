@@ -1,47 +1,38 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("com.gradleup.shadow") version "8.3.5"
+    kotlin("jvm") version "2.0.20"
+    id("com.gradleup.shadow") version "8.3.0"
     id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 group = "com.skittlemc"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 repositories {
-    mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    implementation(kotlin("stdlib"))
+    compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
 }
 
+val targetJavaVersion = 21
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(targetJavaVersion)
 }
 
-tasks {
-    processResources {
-        val props = mapOf("version" to version)
-        inputs.properties(props)
-        filesMatching("plugin.yml") {
-            expand(props)
-        }
-    }
+tasks.build {
+    dependsOn("shadowJar")
+}
 
-    runServer {
-        minecraftVersion("1.21.4")
+tasks.processResources {
+    val props = mapOf("version" to version)
+    inputs.properties(props)
+    filteringCharset = "UTF-8"
+    filesMatching("plugin.yml") {
+        expand(props)
     }
+}
 
-    shadowJar {
-        archiveClassifier.set("")
-        mergeServiceFiles()
-
-        relocate("kotlin", "com.skittlemc.ritualforge.shaded.kotlin")
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
+tasks.runServer {
+    minecraftVersion("1.21")
 }
