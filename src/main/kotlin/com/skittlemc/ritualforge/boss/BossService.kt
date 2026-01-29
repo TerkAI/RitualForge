@@ -10,11 +10,14 @@ import com.skittlemc.ritualforge.util.Text
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
+import java.net.URI
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
@@ -79,7 +82,14 @@ class BossService(private val plugin: RitualForgePlugin) {
         if (equipment != null) {
             definition.equipment.mainHand?.let { equipment.setItemInMainHand(ItemStack(it)) }
             definition.equipment.offHand?.let { equipment.setItemInOffHand(ItemStack(it)) }
-            definition.equipment.helmet?.let { equipment.helmet = ItemStack(it) }
+
+            // Use skin texture as head if provided, otherwise use helmet from equipment
+            if (definition.skinTexture != null) {
+                equipment.helmet = createSkullWithSkin(definition.skinTexture)
+            } else {
+                definition.equipment.helmet?.let { equipment.helmet = ItemStack(it) }
+            }
+
             definition.equipment.chestplate?.let { equipment.chestplate = ItemStack(it) }
             definition.equipment.leggings?.let { equipment.leggings = ItemStack(it) }
             definition.equipment.boots?.let { equipment.boots = ItemStack(it) }
@@ -94,6 +104,32 @@ class BossService(private val plugin: RitualForgePlugin) {
         }
 
         return entity
+    }
+
+    private fun createSkullWithSkin(skinTexture: String): ItemStack {
+        val skull = ItemStack(Material.PLAYER_HEAD)
+        val meta = skull.itemMeta as? SkullMeta ?: return skull
+
+        val profile = Bukkit.createPlayerProfile(UUID.randomUUID())
+        val textures = profile.textures
+
+        // Build texture URL
+        val textureUrl = if (skinTexture.startsWith("http")) {
+            skinTexture
+        } else {
+            "https://textures.minecraft.net/texture/$skinTexture"
+        }
+
+        try {
+            textures.skin = URI(textureUrl).toURL()
+            profile.setTextures(textures)
+            meta.ownerProfile = profile
+        } catch (e: Exception) {
+            plugin.logger.warning("Failed to set skin texture: ${e.message}")
+        }
+
+        skull.itemMeta = meta
+        return skull
     }
 
     fun despawn(instanceId: UUID) {

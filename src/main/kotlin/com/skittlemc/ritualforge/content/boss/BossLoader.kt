@@ -48,6 +48,7 @@ class BossLoader(private val plugin: RitualForgePlugin) {
             description = cfg.getString("description") ?: "A fearsome boss.",
             maxHealth = cfg.getDouble("max_health", 500.0),
             entityType = entityType,
+            skinTexture = cfg.getString("skin_texture"),
             equipment = equipment,
             glowing = cfg.getBoolean("glowing", false),
             scale = cfg.getDouble("scale", 1.0),

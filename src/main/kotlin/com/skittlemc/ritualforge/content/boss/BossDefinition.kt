@@ -9,6 +9,7 @@ data class BossDefinition(
     val description: String = "A fearsome boss.",
     val maxHealth: Double,
     val entityType: EntityType = EntityType.ZOMBIE,
+    val skinTexture: String? = null,  // Player skin texture hash/URL
     val equipment: BossEquipment = BossEquipment(),
     val glowing: Boolean = false,
     val scale: Double = 1.0,
