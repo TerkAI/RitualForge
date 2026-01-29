@@ -7,6 +7,7 @@ import com.skittlemc.ritualforge.content.ContentManager
 import com.skittlemc.ritualforge.gui.GuiListener
 import com.skittlemc.ritualforge.gui.GuiManager
 import com.skittlemc.ritualforge.persistence.DataStore
+import com.skittlemc.ritualforge.ritual.RitualListener
 import com.skittlemc.ritualforge.ritual.RitualService
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -35,6 +36,7 @@ class RitualForgePlugin : JavaPlugin() {
 
         // Register listeners
         server.pluginManager.registerEvents(GuiListener(this), this)
+        server.pluginManager.registerEvents(RitualListener(this), this)
 
         // Register commands
         getCommand("ritualforge")?.let { cmd ->

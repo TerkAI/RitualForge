@@ -10,7 +10,7 @@ import org.bukkit.entity.Player
 
 class RitualService(private val plugin: RitualForgePlugin) {
 
-    private val shrineDetector = ShrineDetector()
+    val shrineDetector = ShrineDetector()
     private val activationFlow = ActivationFlow(plugin)
 
     fun tryActivate(player: Player, location: Location): Boolean {
