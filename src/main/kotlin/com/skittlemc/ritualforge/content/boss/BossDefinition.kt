@@ -1,10 +1,9 @@
 package com.skittlemc.ritualforge.content.boss
 
-import com.skittlemc.ritualforge.content.model.ModelDefinition
-
 data class BossDefinition(
     val id: String,
     val displayName: String,
+    val description: String = "A fearsome boss.",
     val maxHealth: Double,
     val modelId: String,
     val phases: List<PhaseDefinition>,

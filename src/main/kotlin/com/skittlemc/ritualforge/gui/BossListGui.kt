@@ -2,7 +2,6 @@ package com.skittlemc.ritualforge.gui
 
 import com.skittlemc.ritualforge.RitualForgePlugin
 import com.skittlemc.ritualforge.util.Text
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Material

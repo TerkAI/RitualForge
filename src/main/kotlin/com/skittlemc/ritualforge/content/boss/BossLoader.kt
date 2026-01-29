@@ -36,6 +36,7 @@ class BossLoader(private val plugin: RitualForgePlugin) {
         return BossDefinition(
             id = id,
             displayName = cfg.getString("display_name") ?: id,
+            description = cfg.getString("description") ?: "A fearsome boss.",
             maxHealth = cfg.getDouble("max_health", 500.0),
             modelId = cfg.getString("model") ?: id,
             phases = phases,
