@@ -3,6 +3,7 @@ package com.skittlemc.ritualforge.boss
 import com.skittlemc.ritualforge.RitualForgePlugin
 import com.skittlemc.ritualforge.api.events.BossDeathEvent
 import com.skittlemc.ritualforge.api.events.BossSpawnEvent
+import com.skittlemc.ritualforge.boss.display.BlockBossDisplay
 import com.skittlemc.ritualforge.content.boss.BossDefinition
 import com.skittlemc.ritualforge.util.Keys
 import com.skittlemc.ritualforge.util.Tasks
@@ -17,6 +18,8 @@ import org.bukkit.entity.Mob
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import java.net.URI
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -42,6 +45,23 @@ class BossService(private val plugin: RitualForgePlugin) {
         Tasks.region(plugin, location) {
             val entity = spawnEntity(definition, location, instance.uuid)
             instance.entity = entity
+
+            // If skin texture is defined, create block display and make entity invisible
+            if (definition.skinTexture != null && entity != null) {
+                val display = BlockBossDisplay(
+                    displayName = definition.displayName,
+                    skinTexture = definition.skinTexture
+                )
+                display.spawn(location)
+                instance.blockDisplay = display
+
+                // Make the actual entity invisible (it still handles AI/combat)
+                entity.isInvisible = true
+                entity.isCustomNameVisible = false
+                entity.addPotionEffect(
+                    PotionEffect(PotionEffectType.INVISIBILITY, Int.MAX_VALUE, 0, false, false)
+                )
+            }
         }
 
         instances[instance.uuid] = instance

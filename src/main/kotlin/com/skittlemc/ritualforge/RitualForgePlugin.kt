@@ -22,6 +22,7 @@ class RitualForgePlugin : JavaPlugin() {
 
     override fun onEnable() {
         saveDefaultConfig()
+        saveDefaultBosses()
 
         dataStore = DataStore(this)
         contentManager = ContentManager(this)
@@ -56,5 +57,14 @@ class RitualForgePlugin : JavaPlugin() {
             dataStore.save()
         }
         logger.info("RitualForge disabled.")
+    }
+
+    private fun saveDefaultBosses() {
+        val bossesFolder = java.io.File(dataFolder, "bosses")
+        if (!bossesFolder.exists()) {
+            bossesFolder.mkdirs()
+            // Save default boss configuration
+            saveResource("bosses/poopy_guardian.yml", false)
+        }
     }
 }

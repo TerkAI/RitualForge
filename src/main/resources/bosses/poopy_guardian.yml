@@ -1,0 +1,53 @@
+# Poopy Guardian Boss Configuration
+# This boss uses BlockDisplay entities with a custom player skin head
+
+display_name: "Poopy Guardian"
+description: "A terrifying guardian from the depths!"
+
+# Base entity type (handles AI, combat, pathfinding)
+entity_type: ZOMBIE
+
+# Health settings
+max_health: 500.0
+
+# Player skin texture ID from NameMC
+# This creates a player head with this skin for the boss display
+skin_texture: "193f6a5c3073f62f"
+
+# Visual settings
+glowing: false
+scale: 1.0
+
+# Arena radius for the boss fight
+arena_radius: 30.0
+
+# Equipment (only used if no skin_texture, otherwise entity is invisible)
+equipment:
+  main_hand: NETHERITE_SWORD
+  off_hand: SHIELD
+
+# Boss phases
+phases:
+  - health_threshold: 1.0
+    abilities:
+      - ground_slam
+      - charge
+    animation: idle
+
+  - health_threshold: 0.5
+    abilities:
+      - ground_slam
+      - charge
+      - summon_minions
+    animation: enraged
+
+  - health_threshold: 0.25
+    abilities:
+      - ground_slam
+      - charge
+      - summon_minions
+      - laser_beam
+    animation: final_stand
+
+# Loot table reference
+loot_table: poopy_guardian_loot
