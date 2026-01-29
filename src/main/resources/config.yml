@@ -1,0 +1,23 @@
+# RitualForge Configuration
+
+# Debug mode - enables extra logging
+debug: false
+
+# Boss settings
+bosses:
+  # Default arena radius if not specified in boss definition
+  default-arena-radius: 30.0
+  # Despawn bosses when no players are nearby (in blocks)
+  despawn-range: 100
+
+# Ritual settings
+rituals:
+  # Allow rituals to be cancelled by moving
+  cancel-on-move: true
+  # Cooldown between ritual attempts (in seconds)
+  global-cooldown: 10
+
+# GUI settings
+gui:
+  # Sound to play when opening GUI
+  open-sound: "UI_BUTTON_CLICK"
