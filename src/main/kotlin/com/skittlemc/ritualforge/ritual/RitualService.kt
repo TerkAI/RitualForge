@@ -16,8 +16,8 @@ class RitualService(private val plugin: RitualForgePlugin) {
     fun tryActivate(player: Player, location: Location): Boolean {
         val shrine = shrineDetector.detect(location) ?: return false
 
-        val ritualDef = plugin.contentManager.allRitualDefinitions()
-            .firstOrNull { it.shrineType == shrine.type }
+        val ritualDef = plugin.contentManager.getAllRitualDefinitions()
+            .firstOrNull { it.shrineId == shrine.type }
             ?: return false
 
         val event = RitualActivateEvent(player, ritualDef.id, location)
