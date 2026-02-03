@@ -3,7 +3,8 @@ package com.skittlemc.ritualforge.boss
 import com.skittlemc.ritualforge.RitualForgePlugin
 import com.skittlemc.ritualforge.api.events.BossDeathEvent
 import com.skittlemc.ritualforge.api.events.BossSpawnEvent
-import com.skittlemc.ritualforge.boss.display.BlockBossDisplay
+import com.skittlemc.ritualforge.boss.display.DBModelDisplay
+import com.skittlemc.ritualforge.boss.display.models.PoopyGuardianModel
 import com.skittlemc.ritualforge.content.boss.BossDefinition
 import com.skittlemc.ritualforge.util.Keys
 import com.skittlemc.ritualforge.util.Tasks
@@ -46,21 +47,21 @@ class BossService(private val plugin: RitualForgePlugin) {
             val entity = spawnEntity(definition, location, instance.uuid)
             instance.entity = entity
 
-            // If skin texture is defined, create block display and make entity invisible
-            if (definition.skinTexture != null && entity != null) {
-                val display = BlockBossDisplay(
-                    displayName = definition.displayName,
-                    skinTexture = definition.skinTexture
-                )
-                display.spawn(location)
-                instance.blockDisplay = display
+            // If model_id is defined, spawn the display entity model
+            if (definition.modelId != null && entity != null) {
+                val model = getModel(definition.modelId)
+                if (model != null) {
+                    val display = DBModelDisplay(model)
+                    display.spawn(location)
+                    instance.modelDisplay = display
 
-                // Make the actual entity invisible (it still handles AI/combat)
-                entity.isInvisible = true
-                entity.isCustomNameVisible = false
-                entity.addPotionEffect(
-                    PotionEffect(PotionEffectType.INVISIBILITY, Int.MAX_VALUE, 0, false, false)
-                )
+                    // Make the actual entity invisible (it still handles AI/combat)
+                    entity.isInvisible = true
+                    entity.isCustomNameVisible = false
+                    entity.addPotionEffect(
+                        PotionEffect(PotionEffectType.INVISIBILITY, Int.MAX_VALUE, 0, false, false)
+                    )
+                }
             }
         }
 
@@ -68,6 +69,11 @@ class BossService(private val plugin: RitualForgePlugin) {
         Bukkit.getPluginManager().callEvent(BossSpawnEvent(instance))
         plugin.logger.info("Spawned boss '${definition.id}' at ${location.toVector()}")
         return instance
+    }
+
+    private fun getModel(modelId: String) = when (modelId) {
+        "poopy_guardian" -> PoopyGuardianModel.create()
+        else -> null
     }
 
     private fun spawnEntity(definition: BossDefinition, location: Location, bossId: UUID): LivingEntity? {

@@ -1,5 +1,5 @@
 # Poopy Guardian Boss Configuration
-# This boss uses BlockDisplay entities with a custom player skin head
+# This boss uses display entities from DisplayBuilder
 
 display_name: "Poopy Guardian"
 description: "A terrifying guardian from the depths!"
@@ -10,9 +10,9 @@ entity_type: ZOMBIE
 # Health settings
 max_health: 500.0
 
-# Player skin texture ID from NameMC
-# This creates a player head with this skin for the boss display
-skin_texture: "193f6a5c3073f62f"
+# Display entity model ID (from DisplayBuilder)
+# The model is defined in PoopyGuardianModel.kt
+model: "poopy_guardian"
 
 # Visual settings
 glowing: false

@@ -1,7 +1,7 @@
 package com.skittlemc.ritualforge.boss
 
 import com.skittlemc.ritualforge.boss.combat.HealthComponent
-import com.skittlemc.ritualforge.boss.display.BlockBossDisplay
+import com.skittlemc.ritualforge.boss.display.DBModelDisplay
 import com.skittlemc.ritualforge.boss.phase.PhaseController
 import com.skittlemc.ritualforge.content.boss.BossDefinition
 import org.bukkit.Location
@@ -19,12 +19,10 @@ class BossInstance(
     val phaseController = PhaseController(this)
 
     var entity: LivingEntity? = null
-    var blockDisplay: BlockBossDisplay? = null
+    var modelDisplay: DBModelDisplay? = null
     var target: Player? = null
     var alive: Boolean = true
         private set
-
-    private var isMoving: Boolean = false
 
     val currentPhase: Int get() = phaseController.currentPhaseIndex
 
@@ -40,20 +38,7 @@ class BossInstance(
             health.current = e.health
 
             // Update display position to follow entity
-            blockDisplay?.teleportTo(e.location)
-
-            // Check if entity is moving
-            val velocity = e.velocity
-            isMoving = velocity.lengthSquared() > 0.01
-        }
-
-        // Animate the block display
-        blockDisplay?.let { display ->
-            if (isMoving) {
-                display.animateWalk()
-            } else {
-                display.animateIdle()
-            }
+            modelDisplay?.teleportTo(e.location)
         }
 
         phaseController.tick()
@@ -63,7 +48,7 @@ class BossInstance(
         alive = false
         entity?.remove()
         entity = null
-        blockDisplay?.remove()
-        blockDisplay = null
+        modelDisplay?.remove()
+        modelDisplay = null
     }
 }
